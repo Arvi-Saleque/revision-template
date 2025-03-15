@@ -53,3 +53,56 @@ int main() {
     }
     return 0;
 }
+
+// https://vjudge.net/problem/codeforces-1368d
+
+// check if it possible to work on bit independelty
+// and somehow shift the bit 
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+const int N = 2e5 + 9, mod = 998244353;
+void solve() { 
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    for(int i = 0; i < n; i++) {
+        cin >> v[i];
+    }
+
+    vector<int> cnt(20);
+    for(int j = 19; j >= 0; j--) {
+        for(auto x : v) {
+            if(x & (1 << j)) {
+                cnt[j]++;
+            }
+        }
+    }
+
+    v.clear();
+    v.resize(n + 1, 0);
+    for(int i = 0; i <= 19; i++) {
+        for(int j = 0; j < cnt[i]; j++) {
+            v[j] += (1 << i);
+        }
+    }
+
+    ll sum = 0;
+    for(int i = 0; i < n; i++) {
+        //cout << v[i] << " \n"[i + 1 == n];
+        sum += (1LL * v[i] * v[i]);
+    }
+
+    cout << sum << "\n";
+}          
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1, cs = 1;  
+    //cin >> t;
+    while (t--) {
+        //cout << "Case " << cs++ << ": ";
+        solve();
+    }
+    return 0;
+}
