@@ -1,2 +1,5 @@
 https://codeforces.com/contest/1628/problem/B
 // if the problem is arbitary length then it can be solved using trie 
+
+https://codeforces.com/problemset/problem/1244/D
+// if there are k color then it can be solved usign dp on tree
