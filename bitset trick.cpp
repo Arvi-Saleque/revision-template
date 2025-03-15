@@ -44,3 +44,44 @@ int main() {
     }
     return 0;
 }
+
+// https://vjudge.net/problem/UVA-12716
+
+// gcd(a, b) <= b - a
+// a ^ b >= b - a
+// so gcd(a, b) = a ^ b = b - a
+// so just fix d = b - a then pre calculate 
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+const int N = 3e7, mod = 998244353;
+ll ans[N + 2];
+void pre() {
+    for(int d = 1; d <= N; d++) {
+        for(int j = d; j + d <= N; j += d) {
+            if((j ^ (j + d)) == d) {
+                ans[j + d]++;
+            }
+        }
+    }
+    for(int i = 2; i <= N; i++) {
+        ans[i] += ans[i - 1];
+    }
+}
+void solve() {
+    int n;
+    cin >> n;
+    cout << ans[n] << "\n";
+}   
+int main() {
+    pre();
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    int t = 1, cs = 1;
+    cin >> t;
+    while(t--) {
+        cout << "Case " << cs++ << ": ";
+        solve();
+    }
+    return 0;
+}
