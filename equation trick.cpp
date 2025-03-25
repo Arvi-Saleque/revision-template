@@ -5,9 +5,6 @@
 // then try to generanize and make all i/j in one side
 // do some algebra and try to find solution
 
-<details> <summary>Click to expand</summary>
-markdown
-Copy
 ```latex
 We start with the given equation:
 $$
@@ -43,11 +40,7 @@ Thus, the condition for a valid pair \((i,j)\) is equivalent to:
 $$
 f(a_i) \equiv f(a_j) \pmod{p}.
 $$
-css
-Copy
-</details>
-
-
+```
 
 #include<bits/stdc++.h>
 using namespace std;
