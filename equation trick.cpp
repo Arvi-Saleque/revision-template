@@ -5,8 +5,13 @@
 // then try to generanize and make all i/j in one side
 // do some algebra and try to find solution
 
-`a_i^4 - a_j^4 = (a_i - a_j)(a_i + a_j)(a_i^2 + a_j^2)`
-
+(a_i + a_j)(a_i^2 + a_j^2) ≡ k (mod p)
+a_i^4 - a_j^4 = (a_i - a_j)(a_i + a_j)(a_i^2 + a_j^2)
+(a_i^4 - a_j^4) / (a_i - a_j) ≡ k (mod p)
+a_i^4 - a_j^4 ≡ k(a_i - a_j) (mod p)
+a_i^4 - k * a_i ≡ a_j^4 - k * a_j (mod p)
+f(x) = x^4 - kx (mod p)
+f(a_i) ≡ f(a_j) (mod p)
 
 #include<bits/stdc++.h>
 using namespace std;
