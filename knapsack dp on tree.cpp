@@ -19,34 +19,29 @@ void solve() {
     }
 
     vector<vector<ll>> dp1(n + 1, vector<ll>(k + 1, neg));
-    vector<vector<ll>> vis1(n + 1, vector<ll>(k + 1, 0));
 
     for(int i = 1; i <= n; i++) {
         dp1[i][1] = cost[i];
         dp1[i][0] = 0;
-        vis1[i][1] = 1;
-        vis1[i][0] = 1;
     }
 
     vector<vector<vector<ll>>> dp2(n + 1);
-    vector<vector<vector<bool>>> vis2(n + 1);
 
     for(int u = 1; u <= n; u++) {
         int sz = g[u].size();
         dp2[u].assign(sz + 1, vector<ll>(k + 1, neg));
-        vis2[u].assign(sz + 1, vector<bool>(k + 1, 0));
     }
 
     function<ll(int, int, int, vector<int> &)> knapsack = [&](int u, int pos, int cnt, vector<int> &vec) -> ll {
         if(pos == vec.size()) {
             if(cnt == 0) return 0LL;
-            return neg;
+            return neg / 2;
         }
         ll &ans = dp2[u][pos][cnt];
-        if(vis2[u][pos][cnt]) return ans;
-        vis2[u][pos][cnt] = 1;
+        if(dp2[u][pos][cnt] != neg) return ans;
+        ans = neg;
         for(int c = 0; c <= cnt; c++) {
-            if(!vis1[vec[pos]][c]) continue;
+            if(dp1[vec[pos]][c] == neg) continue;
             ans = max(ans, dp1[vec[pos]][c] + knapsack(u, pos + 1, cnt - c, vec));
         }
         return ans;
@@ -54,11 +49,11 @@ void solve() {
 
     function<ll(int, int, int)> f = [&](int u, int p, int cnt) -> ll {
         ll &ans = dp1[u][cnt];
-        if(vis1[u][cnt]) return ans;
-        vis1[u][cnt] = 1;
+        if(dp1[u][cnt] != neg) return ans;
+        ans = neg;
         for(auto v : g[u]) if( v != p) {
             for(int c = 0; c <= cnt; c++) {
-                if(!vis1[v][c]) f(v, u, c);
+                f(v, u, c);
             }
         }
         ll res = neg;
