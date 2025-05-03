@@ -87,3 +87,62 @@ int main() {
         solve();
     }
 }
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int const N = 1e6 + 2, mod = 1e9 + 7;
+ll const neg = -1e18;
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<vector<int>> g(n + 1);
+    for(int i = 2; i <= n; i++) {
+        int x; cin >> x;
+        g[x].push_back(i);
+    }
+    vector<ll> cost(n + 1);
+    for(int i = 1; i <= n; i++) {
+        cin >> cost[i];
+    }
+
+    vector<vector<ll>> dp(n + 1, vector<ll>(k + 1, neg));
+
+    function<void(int, int)> dfs = [&](int u, int p) -> void {
+        dp[u][1] = cost[u];
+
+        for(auto v : g[u]) if ( v != p) {
+            dfs(v, u);
+
+            vector<ll> ndp(k + 1, neg);
+            for(int x = 1; x <= k; x++) {
+                if(dp[u][x] == neg) continue;
+                for(int y = 0; x + y <= k; y++) {
+                    if(dp[v][y] == neg) continue;
+                    ndp[x + y] = max(ndp[x + y], dp[u][x] + dp[v][y]);
+                }
+            }
+
+            for(int i = 1; i <= k; i++) {
+                dp[u][i] = max(ndp[i], dp[u][i]);
+            }
+        }
+    };
+
+    dfs(1, 0);
+
+    ll ans = neg;
+    for(int i = 1; i <= n; i++) {
+        ans = max(ans, dp[i][k]);
+    }
+    cout << ans << "\n";
+}
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t = 1;
+    //cin >> t;
+    while(t--) {
+        solve();
+    }
+}
