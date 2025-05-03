@@ -146,3 +146,90 @@ int main() {
         solve();
     }
 }
+
+
+// https://codeforces.com/problemset/problem/855/C
+
+/*
+for knapsack dp try to loop on all possibilities
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int const N = 1e6 + 2, mod = 1e9 + 7;
+ll const neg = -1e18;
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> g(n + 1);
+    for(int i = 1; i < n; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    int k, x;
+    cin >> k >> x;
+
+    if(n == 1 && k == 1) {
+        cout << 1 << "\n";
+        return;
+    }
+
+    vector<vector<vector<ll>>> dp(n + 1, vector<vector<ll>>(3, vector<ll>(x + 1, 0)));
+
+    function<void(int, int)> dfs = [&](int u, int p) -> void {
+            
+        vector<vector<ll>> cur(3, vector<ll>(x + 1, 0));
+
+        cur[0][0] = k - 1;
+        cur[1][1] = 1;
+        cur[2][0] = m - k;
+
+        for(auto v : g[u]) if(v != p) {
+            dfs(v, u);
+
+            vector<vector<ll>> new_cur(3, vector<ll>(x + 1, 0));
+
+            for(int su = 0; su <= 2; su++) {
+                for(int sv = 0; sv <= 2; sv++) {
+                    for(int c1 = 0; c1 <= x; c1++) {
+                        for(int c2 = 0; c1 + c2 <= x; c2++) {
+                            if(su == 1 && sv != 0) continue;
+                            if(su != 0 && sv == 1) continue;
+                            new_cur[su][c1 + c2] = (new_cur[su][c1 + c2] + (cur[su][c1] * dp[v][sv][c2]) % mod) % mod;
+                        }
+                    }
+                }
+            }
+
+            swap(cur, new_cur);
+        }
+
+        for(int s = 0; s <= 2; s++) {
+            for(int c = 0; c <= x; c++) {
+                dp[u][s][c] = cur[s][c];
+            }
+        }
+        
+    };
+
+    dfs(1, 0);
+
+    ll ans = 0;
+    for(int c = 0; c <= x; c++){
+        ans = (ans + dp[1][0][c] + dp[1][1][c] + dp[1][2][c]) % mod;
+    }
+
+    cout << ans << "\n";
+}
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t = 1;
+    //cin >> t;
+    while(t--) {
+        solve();
+    }
+}
