@@ -3,7 +3,7 @@
 // sometimes we can observe and reduct the value to very lower
 // here k can be max 120 
 // also there can be max 30*120 difference type of f(y-1,k) call occur
-// so map dp wonts exceed too much 
+// so map dp dp[{x, k}]  wonts exceed too much 
 
 #include <bits/stdc++.h>
 using namespace std;
