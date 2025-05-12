@@ -1,9 +1,7 @@
 // https://codeforces.com/problemset/problem/1328/E
 
 /*
-if i need to check if any node u belongs to the path
-from root to a fixed leaf 
-we need to check just
+if_v_is_child_of_u
 tin[u] <= tin[leaf] && tout[u] >= tout[leaf]
 */
 
@@ -36,8 +34,8 @@ void solve() {
     dfs(1, 0, 0);
 
     // return true if u is on the path from root to leaf
-    auto check = [&](int leaf, int u) {
-        if(tin[u] <= tin[leaf] && tout[u] >= tout[leaf]) return true;
+    auto if_v_is_child_of_u = [&](int v, int u) {
+        if(tin[u] <= tin[v] && tout[u] >= tout[v]) return true;
         return false;
     };
 
@@ -60,7 +58,7 @@ void solve() {
         bool flag = 1;
         for(auto x : nodes) {
             //cout << x << " " << check(node, x) << "\n";
-            flag &= check(node, x);
+            flag &= if_v_is_child_of_u(node, x);
         }
         cout << (flag ? "YES\n" : "NO\n");
     }
