@@ -120,3 +120,89 @@ int main(){
         solve();
     }
 } 
+
+
+// https://www.spoj.com/problems/SUBXOR/
+
+/*
+count how many subarray Xor < k
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 1e7 + 9, mod = 998244353; 
+ 
+struct Trie {
+    const int B = 20;
+    struct node { // 1 based
+        node *child[2];
+        int cnt;
+        node() {
+            child[0] = child[1] = 0;
+            cnt = 0;
+        }
+    } *root;
+    
+    Trie () {
+        root = new node();
+    }
+
+    void insert(int x) {
+        auto cur = root;
+        for(int i = B - 1; i >= 0; i--) {
+            int id = (x >> i) & 1;
+            if(!cur->child[id]) cur->child[id] = new node();
+            cur = cur->child[id];
+            cur->cnt++;
+        }
+    }
+
+    ll countLess(int y, int k) {
+        auto cur = root;
+        ll ans = 0;
+        for(int i = B - 1; i >= 0 && cur; i--) {
+            int yb = (y >> i) & 1;
+            int kb = (k >> i) & 1;
+            if(kb == 1) {
+                if(cur->child[yb]) {
+                    ans += cur->child[yb]->cnt;
+                }
+                cur = cur->child[!yb];
+            }
+            else {
+                cur = cur->child[yb];
+            }
+        }
+        return ans;
+    }
+
+};
+
+void solve() {
+    int n, k;
+    cin >> n >> k;
+    vector<int> v(n);
+    for(auto &x : v) cin >> x;
+    ll ans = 0;
+    int pref = 0;
+    Trie trie;
+    trie.insert(0);
+    for(auto x : v) {
+        pref ^= x;
+        ans += trie.countLess(pref, k);
+        trie.insert(pref);
+    }
+    cout << ans << "\n";
+}  
+ 
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int tc = 1, cs = 1;
+    cin >> tc;
+    while(tc--) {
+        //cout << "Case " << cs++ << ": " << "\n";
+        solve();
+    }
+} 
