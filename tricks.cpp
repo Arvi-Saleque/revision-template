@@ -53,3 +53,16 @@ int32_t main() {
   }
   return 0;
 }
+
+// custom comparator of set
+auto cmp = [&](int u, int v) {
+    int d1 = dist(1, u);
+    int d2 = dist(1, v);
+    return (d1 < d2);
+};
+set<int, function<bool(int, int)>> st(cmp);
+for(int i = 1; i <= k; i++) {
+    int x; cin >> x;
+    lc = lca(lc, x);
+    st.insert(x);
+}
