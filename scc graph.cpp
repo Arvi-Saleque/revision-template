@@ -63,8 +63,8 @@ struct SCC_graph {
         // make the condensed graph
         condensed.resize(compid + 1);
         allcomponents.resize(compid + 1);
-        indeg.resize(compid + 1);
-        outdeg.resize(compid + 1);
+        indeg.assign(compid + 1, 0);
+        outdeg.assign(compid + 1, 0);
         for(int u = 1; u <= n; u++) {
             allcomponents[whichcmp[u]].push_back(u);
             for(auto v : g[u]) {
@@ -72,8 +72,8 @@ struct SCC_graph {
                 int cmpv = whichcmp[v];
                 if(cmpu != cmpv) {
                     // u -> v
-                    indeg[cmpu]++;
-                    outdeg[cmpv]++;
+                    indeg[cmpv]++;
+                    outdeg[cmpu]++;
                     condensed[cmpu].push_back(cmpv);
                 }
             }
