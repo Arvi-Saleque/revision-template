@@ -52,3 +52,52 @@ struct Spares_table { // must be 0-based
         cout << "\n";
     }
 };
+
+
+struct Spares_table { // must be 0-based
+    vector<vector<pair<int, int>>> t;
+    int n, q, lg, sz;
+    Spares_table(){}
+    Spares_table(int n, int q, int sz, vector<int> a, vector<int> b) {
+        this->n = n;
+        this->q = q;
+        this->sz = sz;
+        lg = log2(n) + 1;
+        t.assign(n, vector<pair<int, int>>(lg));
+        for(int i = 0; i < n; i++) {
+            t[i][0].first = a[i + 1];
+            t[i][0].second = b[i + 1];
+        }
+        build();
+    }
+    void build() {
+        for(int j = 1; j < lg; j++) {
+            for(int i = 0; i + (1 << (j - 1)) < n; i++) {
+                t[i][j].first = max(t[i][j - 1].first, t[i + (1 << (j - 1))][j - 1].first);
+                t[i][j].second = min(t[i][j - 1].second, t[i + (1 << (j - 1))][j - 1].second);
+            }
+        }
+    }
+    pair<int, int> query(int l, int r) { // must be 0 based index
+        int len = r - l + 1;
+        int k = log2(len);
+        int mx = max(t[l][k].first, t[l + len - (1 << k)][k].first);
+        int mn = min(t[l][k].second, t[l + len - (1 << k)][k].second);
+        return {mx, mn};
+    }
+    void solve() {
+        //print();
+        string ans(q, '0');
+        for(int i = 0; i < q; i++) {
+            int l, r;
+            cin >> l >> r;
+            l--; r--;   
+            auto [mx, mn] = query(l, r);
+            //cout << l << " " << r << " " << mx << " " << mn << "\n";
+            if(mx >= sz && mn >= l + 1) {
+                ans[i] = '1'; 
+            }
+        }
+        cout << ans << "\n";
+    }
+};
