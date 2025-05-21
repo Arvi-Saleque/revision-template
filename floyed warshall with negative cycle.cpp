@@ -36,6 +36,8 @@ void solve() {
                 }
             }
         }
+        /* if (d[i][k] + d[k][j] < d[i][j] - EPS)
+              d[i][j] = d[i][k] + d[k][j]; */
 
         for (int k = 0; k < n; k++) {
             if(dis[k][k] >= 0) continue;
