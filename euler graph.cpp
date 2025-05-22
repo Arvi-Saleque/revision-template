@@ -15,7 +15,7 @@ in - out == 1 && out - in == 1
 
 struct EulerGraph {
     vector<vector<pair<int, int>>> g;
-    vector<int> done, path, indeg, outdeg;
+    vector<int> done, path, edges, indeg, outdeg;
     vector<bool> visedge;
     bool isdirected;
     int n, m;
@@ -32,6 +32,7 @@ struct EulerGraph {
         for(int i = 1; i <= m; i++) {
             int u, v;
             cin >> u >> v;
+            u++, v++;
             g[u].push_back({v, i});
             indeg[v]++, outdeg[u]++;
             if(!isdirected) {
@@ -49,6 +50,7 @@ struct EulerGraph {
                 visedge[eid] = 1;
             }
             dfs(v);
+            edges.push_back(eid);
         }
         path.push_back(u);
     }
@@ -102,44 +104,86 @@ struct EulerGraph {
         auto [root, flag] = find_start();
         if(isdirected) {
             if(!flag) {
-                cout << "IMPOSSIBLE\n";
+                cout << "No\n";
+                return;
             } 
             else {
-                if(root != -1 && root != 1) {
-                    cout << "IMPOSSIBLE\n";
+                if(m == 0) {
+                    cout << "Yes\n";
+                    cout << 0 << "\n\n";
+                    return;
                 }
-                else{
-                    if(root == -1) root = 1;
+                if(root == -1) {
+                    for(int i = 1; i <= n; i++) {
+                        if(outdeg[i] > 0) {
+                            root  = i;
+                            break;
+                        }
+                    }
                 }
                 dfs(root);
                 reverse(path.begin(), path.end());
-                if(path.size() != m + 1 || path.back() != n) {
-                    cout << "IMPOSSIBLE\n";
+                reverse(edges.begin(), edges.end());
+                if(path.size() != m + 1) {
+                    cout << "No\n";
                     return;
                 }
-                for(auto x : path) {
-                    cout << x << " ";
+                cout << "Yes\n";
+                // print vertices
+                for (int i = 0; i < (int)path.size(); i++) {
+                    cout << path[i] - 1;
+                    if (i + 1 < (int)path.size()) cout << ' ';
                 }
-                cout << "\n";
+                cout << '\n';
+
+                // print edges
+                for (int i = 0; i < (int)edges.size(); i++) {
+                    cout << edges[i] - 1;
+                    if (i + 1 < (int)edges.size()) cout << ' ';
+                }
+                cout << '\n';
             }
         }
         else {
             if(!flag) {
-                cout << "IMPOSSIBLE\n";
+                cout << "No\n";
+                return;
             } 
             else {
-                if(root == -1) root = 1; // any can be root 
-                dfs(root);
-                reverse(path.begin(), path.end());
-                if(path.size() != m + 1 || (path.front() != path.back()) ||
-                    ((indeg[root] & 1) &&  !(indeg[path.back()] & 1))) {
-                    cout << "IMPOSSIBLE\n";
+                if(m == 0) {
+                    cout << "Yes\n";
+                    cout << 0 << "\n\n";
                     return;
                 }
-                for(auto x : path) {
-                    cout << x << " ";
+                if(root == -1) {
+                    for(int i = 1; i <= n; i++) {
+                        if(indeg[i] > 0) {
+                            root  = i;
+                            break;
+                        }
+                    }
                 }
-                cout << "\n";
+                dfs(root);
+                reverse(path.begin(), path.end());
+                reverse(edges.begin(), edges.end());
+                if(path.size() != m + 1) {
+                    cout << "No\n";
+                    return;
+                }
+                cout << "Yes\n";
+                // print vertices
+                for (int i = 0; i < (int)path.size(); i++) {
+                    cout << path[i] - 1;
+                    if (i + 1 < (int)path.size()) cout << ' ';
+                }
+                cout << '\n';
+
+                // print edges
+                for (int i = 0; i < (int)edges.size(); i++) {
+                    cout << edges[i] - 1;
+                    if (i + 1 < (int)edges.size()) cout << ' ';
+                }
+                cout << '\n';
             }
         }
     }
@@ -155,7 +199,7 @@ void solve() {
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
     int t = 1;
-    //cin >> t;
+    cin >> t;
     while(t--) {
         solve();
     }
