@@ -6,8 +6,8 @@ const ll inf = 1e18;
 
 /*
 all the edges should be in the same connected component
-#undirected graph: euler path: all degrees are even or exactly two of them are odd.
-#undirected graph: euler circuit: all degrees are even
+#undirected graph: euler path/trail: all degrees are even or exactly two of them are odd.
+#undirected graph: euler circuit/cylce[start == end]: all degrees are even
 #directed graph: euler path: for all -> indeg = outdeg or 
 in - out == 1 && out - in == 1
 #directed graph: euler circuit: for all -> indeg = outdeg
