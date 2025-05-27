@@ -172,3 +172,48 @@ int main(){
     }
 } 
 
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+const int N = 1e6 + 9, mod = 1e9 + 7; 
+void solve() {
+    int n;
+    cin >> n;
+    int bit = 23;
+    int mask = (1 << bit);
+    vector<int> v(n);
+    vector<int> dp1(mask + 1, 0), par(mask + 1, 0);
+    for(auto &x : v) {
+        cin >> x;
+        dp1[x]++;
+        par[x] = x;
+    }
+     
+    for(int i = 0; i < bit; i++) {
+        for(int m = 0; m < mask; m++) {
+            if(m & (1 << i)) {
+                dp1[m] += dp1[m ^ (1 << i)];
+                par[m] = max(par[m], par[m ^ (1 << i)]);
+            } 
+        }
+    }
+
+    for(auto x : v) {
+        int flipx = (1 << bit) - 1 - x;
+        cout << (dp1[flipx] == 0 ? -1 : par[flipx]) << " ";
+    }
+}
+ 
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int tc = 1, cs = 1;
+    //cin >> tc;
+    while(tc--) {
+        //cout << "Case " << cs++ << ": ";
+        solve();
+    }
+} 
+
+
