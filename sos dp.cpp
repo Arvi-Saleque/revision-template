@@ -217,3 +217,65 @@ int main(){
 } 
 
 
+//https://cses.fi/problemset/task/3141/
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+const int N = 1e6 + 9, mod = 1e9 + 7; 
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> v(n);
+    int bit = 18;
+    int mask = (1 << bit);
+    vector<ll> cnt(mask);
+    for(auto &x : v) {
+        cin >> x;
+        cnt[x]++;
+    }
+
+    for(int i = bit - 1; i >= 0; i--) {
+        for(int m = mask - 1; m >= 0; m--) {
+            if(!(m & (1 << i))) {
+                cnt[m] = (cnt[m] + cnt[m ^ (1 << i)]) % mod; // supermask
+            }
+        }
+    }
+
+    vector<ll> pw(n + 1);
+    pw[0] = 1;
+    for(int i = 1; i<= n; i++) {
+        pw[i] = (1LL * 2 * pw[i - 1]) % mod;
+    }
+
+    vector<ll> sup(mask);
+    for(int m = 0; m < mask; m++) {
+        sup[m] = (pw[cnt[m]] - 1 + mod) % mod;
+    }
+
+    auto exact = sup;
+    for(int i = 0; i < bit; i++) {
+        for(int m = 0; m < mask; m++) {
+            if(!(m & (1 << i))) {
+                exact[m] = (exact[m] - exact[m | (1 << i)] + mod) % mod;
+            }
+        }
+    }
+
+    for(int i = 0; i <= n; i++) {
+        cout << exact[i] << " ";
+    }
+}
+ 
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int tc = 1, cs = 1;
+    //cin >> tc;
+    while(tc--) {
+        //cout << "Case " << cs++ << ": ";
+        solve();
+    }
+} 
