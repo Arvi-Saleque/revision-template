@@ -65,18 +65,18 @@ public:
         build(rc, mid + 1, e);
         merge(t[nd], t[lc], t[rc]);
     }
-     int query(int nd,int b,int e,int i,int j,int r){         
-        if(j<b||e<i) return INT_MAX;
-        if(i<=b&&e<=j){
-            const auto &v = t[nd].vec;
-            if(v.empty() || v.front().first>r) return 1e9;
-            int cnt = upper_bound(v.begin(),v.end(),r, [](int val,const pair<int,int>&p){ 
-                return val < p.first; 
+    int query(int nd, int b, int e, int i, int j, int k){         
+        if(j < b || e < i) return 1e9;
+        if(i <= b && e <= j) {
+            auto &v = t[nd].vec;
+            if(v.empty() || v.front().first > k) return 1e9;
+            int cnt = upper_bound(v.begin(), v.end(), k, [](int val, pair<int, int> &p){
+                return (val < p.first);
             }) - v.begin();
-            return v[cnt-1].second;                   
-        }
-        int mid=(b+e)>>1;
-        return min(query(lc,b,mid,i,j,r), query(rc,mid+1,e,i,j,r));                 
+            return v[cnt - 1].second;
+        }              
+        int mid = b + e >> 1;
+        return min(query(lc, b, mid, i, j, k), query(rc, mid + 1, e, i, j, k));
     }
 };
 
