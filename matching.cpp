@@ -68,7 +68,7 @@ int main() {
     return 0;
 }
 
-// https://vjudge.net/problem/SPOJ-MATCHING
+// https://judge.yosupo.jp/problem/bipartitematching
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -150,9 +150,16 @@ void solve() {
     for (int i = 0; i < k; i++) {
         int u, v;
         cin >> u >> v;
+        u++;
+        v++;
         obj.add_edge(u, v);
     }
     cout << obj.run() << "\n";
+    for(int u = 1; u <= n; u++) {
+        if(obj.pairU[u] != -1) {
+            cout << u - 1 << " " << obj.pairU[u] - 1 << "\n";
+        }
+    }
 }
 
 int main() {
@@ -161,3 +168,4 @@ int main() {
     solve();
     return 0;
 }
+
